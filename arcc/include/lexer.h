@@ -7,4 +7,6 @@ typedef struct LEXER_STRUCT
     int pos;
 } lexer_t;
 
+lexer_t* lexer_create(char* src, int pos);
+
 #endif
