@@ -47,9 +47,10 @@ char lexer_peek(lexer_t* lexer, int offset)
     return lexer->src[index];
 }
 
+//TODO: Make this support arbitrary length identifiers
 token_t* lexer_read_kw_or_id(lexer_t* lexer)
 {
-    char identifier[20]; //TODO: Make this support arbitrary length identifiers
+    char identifier[20];
     int i = 0;
 
     while (!is_id_terminator(lexer->current))
@@ -57,7 +58,7 @@ token_t* lexer_read_kw_or_id(lexer_t* lexer)
         identifier[i] = lexer->current;
         i += 1;
         lexer_advance(lexer);
-        
+
         if (i >= 20)
             return token_create(TOKEN_BAD, NULL);
     }
@@ -78,6 +79,7 @@ token_t* lexer_read_kw_or_id(lexer_t* lexer)
     return token_create(TOKEN_ID, value);
 }
 
+//TODO: Add support for integer literals
 token_t* lexer_next_token(lexer_t* lexer)
 {
     if (lexer->pos >= lexer->src_len)
