@@ -15,8 +15,11 @@ typedef enum TOKEN_TYPE
     TOKEN_CLOSE_PAREN,
     TOKEN_OPEN_BRACE,
     TOKEN_CLOSE_BRACE,
+    TOKEN_SEMICOLON,
     //EOF token//
-    TOKEN_EOF
+    TOKEN_EOF,
+    //Token for invalid character sequences//
+    TOKEN_BAD
 } token_type_t;
 
 typedef struct TOKEN_STRUCT
