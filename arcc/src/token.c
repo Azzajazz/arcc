@@ -1,5 +1,7 @@
 #include "token.h"
+
 #include <string.h>
+#include <stdlib.h>
 
 token_t* token_create(token_type_t type, void* value)
 {

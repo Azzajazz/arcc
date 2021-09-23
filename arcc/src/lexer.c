@@ -2,6 +2,7 @@
 #include "macros.h"
 
 #include <string.h>
+#include <stdlib.h>
 
 lexer_t* lexer_create_with_pos(char* src, int pos)
 {
