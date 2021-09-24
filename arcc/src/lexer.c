@@ -1,5 +1,5 @@
 #include "lexer.h"
-#include "macros.h"
+#include "utils.h"
 
 #include <ctype.h>
 #include <string.h>
@@ -47,10 +47,10 @@ char lexer_peek(lexer_t* lexer, int offset)
     return lexer->src[index];
 }
 
-//TODO: Make this support arbitrary length identifiers
 token_t* lexer_read_kw_or_id(lexer_t* lexer)
 {
-    char identifier[20];
+    size_t alloc_size = 20;
+    char* identifier = malloc(alloc_size);
     int i = 0;
 
     while (!is_id_terminator(lexer->current))
@@ -59,24 +59,59 @@ token_t* lexer_read_kw_or_id(lexer_t* lexer)
         i += 1;
         lexer_advance(lexer);
 
-        if (i >= 20)
-            return token_create(TOKEN_BAD, NULL);
+        if (i >= alloc_size)
+        {
+            alloc_size += 5;
+            identifier = try_realloc(identifier, alloc_size);
+        }
     }
     identifier[i] = '\0';
 
     if (strcmp(identifier, "int") == 0)
     {
+        free(identifier);
         return token_create(TOKEN_KW_INT, NULL);
     }
 
     if (strcmp(identifier, "return") == 0)
     {
+        free(identifier);
         return token_create(TOKEN_KW_RETURN, NULL);
     }
 
     char* value = malloc(strlen(identifier) + 1);
     strcpy(value, identifier);
+    free(identifier);
     return token_create(TOKEN_ID, value);
+}
+
+token_t* lexer_read_num_lit(lexer_t* lexer)
+{
+    size_t alloc_size = 20;
+    char* identifier = malloc(alloc_size);
+    int i = 0;
+
+    while (!is_id_terminator(lexer->current))
+    {
+        if (!isdigit(lexer->current))
+            return token_create(TOKEN_BAD, NULL);
+
+        identifier[i] = lexer->current;
+        i += 1;
+        lexer_advance(lexer);
+
+        if (i >= alloc_size)
+        {
+            alloc_size += 5;
+            identifier = try_realloc(identifier, alloc_size);
+        }
+    }
+    identifier[i] = '\0';
+
+    int* value = malloc(sizeof(*value));
+    *value = atoi(identifier);
+    free(identifier);
+    return token_create(TOKEN_LIT_INT, value);
 }
 
 //TODO: Add support for integer literals
@@ -94,6 +129,9 @@ token_t* lexer_next_token(lexer_t* lexer)
 
     if (isalpha(lexer->current))
         return lexer_read_kw_or_id(lexer);
+    
+    if (isdigit(lexer->current))
+        return lexer_read_num_lit(lexer);
 
     switch (lexer->current)
     {

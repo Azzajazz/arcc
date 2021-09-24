@@ -27,7 +27,7 @@ char* lexer_peek_range(lexer_t* lexer, int length);
 
 token_t* lexer_read_kw_or_id(lexer_t* lexer);
 
-token_t* lexer_read_int_lit(lexer_t* lexer);
+token_t* lexer_read_num_lit(lexer_t* lexer);
 
 token_t* lexer_next_token(lexer_t* lexer);
 
