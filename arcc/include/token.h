@@ -30,6 +30,8 @@ typedef struct TOKEN_STRUCT
 
 token_t* token_create(token_type_t type, void* value);
 
+void token_destruct(token_t* token);
+
 void print_token(token_t* token);
 
 #endif

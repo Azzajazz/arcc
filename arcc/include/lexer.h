@@ -17,6 +17,8 @@ lexer_t* lexer_create_with_pos(const char* src, int pos);
 
 lexer_t* lexer_create(char* src);
 
+void lexer_destruct(lexer_t* lexer);
+
 void lexer_advance_by(lexer_t* lexer, int offset);
 
 void lexer_advance(lexer_t* lexer);

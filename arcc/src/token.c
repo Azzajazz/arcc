@@ -6,10 +6,16 @@
 
 token_t* token_create(token_type_t type, void* value)
 {
-    token_t* token = malloc(sizeof(struct TOKEN_STRUCT));
+    token_t* token = malloc(sizeof(*token));
     token->type = type;
     token->value = value;
     return token;
+}
+
+void token_destruct(token_t* token)
+{
+    free(token->value);
+    free(token);
 }
 
 void print_token(token_t* token) {

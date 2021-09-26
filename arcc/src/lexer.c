@@ -18,7 +18,7 @@ int is_id_terminator(char c)
 
 lexer_t* lexer_create_with_pos(const char* src, int pos)
 {
-    lexer_t* lexer = malloc(sizeof(struct LEXER_STRUCT));
+    lexer_t* lexer = malloc(sizeof(*lexer));
     lexer->src = src;
     lexer->pos = pos;
     lexer->current = src[pos];
@@ -29,6 +29,11 @@ lexer_t* lexer_create_with_pos(const char* src, int pos)
 lexer_t* lexer_create(char* src)
 {
     return lexer_create_with_pos(src, 0);
+}
+
+void lexer_destruct(lexer_t* lexer)
+{
+    free(lexer);
 }
 
 void lexer_advance_by(lexer_t* lexer, int offset) {
