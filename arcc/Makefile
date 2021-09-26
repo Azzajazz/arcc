@@ -4,12 +4,12 @@ BINDIR = bin/
 
 CC = gcc
 CFLAGS = -I$(INCDIR)
-TARGETS = arcc
+TARGETS = $(BINDIR)arcc
 
 all: $(TARGETS)
 
-arcc: $(SRCDIR)*.c
-	$(CC) $(CFLAGS) $? -o $(BINDIR)$@
+$(BINDIR)arcc: $(SRCDIR)*.c
+	$(CC) $(CFLAGS) $? -o $@
 
 clean:
 	cd $(BINDIR) && rm *.o *.out $(TARGETS)
