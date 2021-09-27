@@ -7,22 +7,28 @@ CC = gcc
 CFLAGS = -I$(INCDIR)
 
 _DEPS = AST.h lexer.h parser.h token.h utils.h
-DEPS = $(patsubst %,$(INCDIR)/%,$(_DEPS))
+DEPS = $(addprefix $(INCDIR)/,$(_DEPS))
 
-_OBJ = AST.o lexer.o parser.o token.o utils.o main.o
-OBJ = $(patsubst %,$(OBJDIR)/%,$(_OBJ))
+_OBJS = AST.o lexer.o parser.o token.o utils.o main.o
+OBJS = $(addprefix $(OBJDIR)/,$(_OBJS))
 
-TARGETS = $(BINDIR)/arcc
+BINS = $(BINDIR)/arcc
 
 .PHONY: all clean
 
-all: $(TARGETS)
+all: $(OBJS) $(BINS)
 
-$(BINDIR)/arcc: $(OBJ)
+$(BINDIR)/arcc: $(OBJS) | $(BINDIR)
 	$(CC) $(CFLAGS) $^ -o $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPS)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPS) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+$(BINDIR):
+	mkdir -p $(BINDIR)
 
 clean:
 	rm $(OBJDIR)/*.o $(BINDIR)/*
