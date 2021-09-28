@@ -19,7 +19,8 @@ typedef enum NODE_TYPE
     NODE_PARAM_LIST,
     //Terminating nodes//
     NODE_TERMINATOR,
-    NODE_INT_CONSTANT
+    NODE_INT_CONSTANT,
+    NODE_RETURN_KEYWORD
 } node_type_t;
 
 typedef struct NODE_STRUCT
@@ -30,9 +31,9 @@ typedef struct NODE_STRUCT
     size_t nchildren;
 } node_t;
 
-node_t* node_create_with_children(node_type_t type, node_t** children, size_t nchildren);
+node_t* node_create_with_children(node_type_t type, void* value, node_t** children, size_t nchildren);
 
-node_t* node_create(node_type_t type);
+node_t* node_create(node_type_t type, void* value);
 
 void node_destruct(node_t* node);
 

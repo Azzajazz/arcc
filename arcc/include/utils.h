@@ -2,6 +2,7 @@
 #define ARCC_UTILS_H
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #define MIN(a, b)           \
 ({                          \
@@ -18,5 +19,7 @@
 })
 
 void* try_realloc(void* ptr, size_t size);
+
+void handle_error(const char* msg, const char* fn);
 
 #endif

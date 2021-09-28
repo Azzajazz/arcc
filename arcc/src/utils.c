@@ -12,3 +12,9 @@ void* try_realloc(void* ptr, size_t size)
     }
     return tmp;
 }
+
+void handle_error(const char* msg, const char* fn)
+{
+    fprintf(stderr, "%s: %s\n", fn, msg);
+    exit(-1);
+}
