@@ -22,4 +22,6 @@ void* try_realloc(void* ptr, size_t size);
 
 void handle_error(const char* msg, const char* fn);
 
+char* read_src_file(const char* filename);
+
 #endif
