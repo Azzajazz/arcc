@@ -48,7 +48,7 @@ void print_ast_indented(node_t* node, int depth)
 {
     int i;
     for (i = 0; i < depth; i++)
-        printf("\t");
+        printf("  ");
 
     switch (node->type)
     {
