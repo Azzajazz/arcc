@@ -6,14 +6,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int is_whitespace(char c)
-{
-    return c == '\n' || c == '\r' || c == ' ' || c == '\t';
-}
-
 int is_id_terminator(char c)
 {
-    return is_whitespace(c) || c == '(' || c == ')' || c == '{' || c == '}' || c == ';' || c == '\0';
+    return isspace(c) || c == '(' || c == ')' || c == '{' || c == '}' || c == ';' || c == '\0';
 }
 
 lexer_t* lexer_create_with_pos(const char* src, int pos)
@@ -99,7 +94,7 @@ token_t* lexer_read_num_lit(lexer_t* lexer)
     while (!is_id_terminator(lexer->current))
     {
         if (!isdigit(lexer->current))
-            return token_create(TOKEN_BAD, NULL);
+            handle_error("Invalid character for integer literal", __func__);
 
         identifier[i] = lexer->current;
         i += 1;
@@ -122,12 +117,14 @@ token_t* lexer_read_num_lit(lexer_t* lexer)
 //TODO: Add support for integer literals
 token_t* lexer_next_token(lexer_t* lexer)
 {
+    char msg[25];
+    
     if (lexer->pos >= lexer->src_len)
     {
         return token_create(TOKEN_EOF, NULL);
     }
 
-    while (is_whitespace(lexer->current))
+    while (isspace(lexer->current))
     {
         lexer_advance(lexer);
     }
@@ -159,7 +156,9 @@ token_t* lexer_next_token(lexer_t* lexer)
         case ';':
             lexer_advance(lexer);
             return token_create(TOKEN_SEMICOLON, NULL);
+        default:
+            snprintf(msg, 25, "Unexpected character (%c)", lexer->current);
+            handle_error(msg, __func__);
     }
-
-    return token_create(TOKEN_BAD, NULL);
 }
+

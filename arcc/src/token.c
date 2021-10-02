@@ -14,7 +14,6 @@ token_t* token_create(token_type_t type, void* value)
 
 void token_destruct(token_t* token)
 {
-    free(token->value);
     free(token);
 }
 
