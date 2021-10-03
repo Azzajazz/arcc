@@ -1,3 +1,5 @@
 arcc/bin
 arcc/obj
+examples/bin
+examples/arcc
 .vscode
