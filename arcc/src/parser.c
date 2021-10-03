@@ -107,7 +107,7 @@ node_t* parser_parse_program(parser_t* parser)
 void parser_assert_token_type(token_t* token, token_type_t type, const char* fn)
 {
     if (token->type != type) {
-        char* msg = malloc(34);
+        char msg[34];
         snprintf(msg, 34, "Expected token type %d, got type %d", type, token->type);
         handle_error(msg, fn);
     }
