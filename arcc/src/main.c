@@ -8,13 +8,14 @@
 int main(int argc, char* argv[])
 {
     const char* usage =
-        "%s\n [SRCFILE] [OPTIONS]\n"
-        "-o OUTFILE: Writes compiled assembly to OUTFILE";
+        "%s [SRCFILE] [OPTIONS]\n\n"
+        "-o OUTFILE: Write compiled assembly to OUTFILE\n";
     
     char* outfile = "out.s";
     if (argc < 2)
     {
         printf(usage, argv[0]);
+        return 1;
     }
     for (int i = 2; i < argc; i += 2)
     {
@@ -23,9 +24,12 @@ int main(int argc, char* argv[])
             {
                 case 'o':
                     outfile = argv[i + 1];
+                default:
+                    printf(usage, argv[0]);
+                    return 1;
             }
         }
-    }        
+    }  
 
     char* src = read_src_file(argv[1]);
     lexer_t* lexer = lexer_create(src);

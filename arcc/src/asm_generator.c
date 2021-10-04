@@ -23,8 +23,8 @@ void generator_emit_program(generator_t* generator)
 {
     generator_assert_node_type(generator->current, NODE_PROGRAM, __func__);
 
-    generator_assert_node_type(generator->current->children[0], NODE_FUNCDEF, __func__);
-    generator->current = generator->current->children[0];
+    generator_assert_node_type(list_at_index(generator->current->children, 0), NODE_FUNCDEF, __func__);
+    generator->current = list_at_index(generator->current->children, 0);
     generator_emit_funcdef(generator);
 }
 
@@ -32,10 +32,10 @@ void generator_emit_funcdef(generator_t* generator)
 {
     generator_assert_node_type(generator->current, NODE_FUNCDEF, __func__);
 
-    generator_assert_node_type(generator->current->children[1], NODE_ID, __func__);
-    fprintf(generator->fp, ".globl %s\n", (char*) generator->current->children[1]->value);
-    fprintf(generator->fp, "%s:\n", (char*) generator->current->children[1]->value);
-    generator->current = generator->current->children[2];
+    generator_assert_node_type(list_at_index(generator->current->children, 1), NODE_ID, __func__);
+    fprintf(generator->fp, ".globl %s\n", (char*) ((node_t*) list_at_index(generator->current->children, 1))->value);
+    fprintf(generator->fp, "%s:\n", (char*) ((node_t*) list_at_index(generator->current->children, 1))->value);
+    generator->current = list_at_index(generator->current->children, 2);
     generator_emit_statement(generator);
 }
 
@@ -43,8 +43,8 @@ void generator_emit_statement(generator_t* generator)
 {
     generator_assert_node_type(generator->current, NODE_STATEMENT, __func__);
 
-    generator_assert_node_type(generator->current->children[0], NODE_RETURN_KEYWORD, __func__);
-    generator->current = generator->current->children[1];
+    generator_assert_node_type(list_at_index(generator->current->children, 0), NODE_RETURN_KEYWORD, __func__);
+    generator->current = list_at_index(generator->current->children, 1);
     generator_emit_expr(generator);
 
     fputs("  ret\n", generator->fp);
@@ -54,8 +54,8 @@ void generator_emit_expr(generator_t* generator)
 {
     generator_assert_node_type(generator->current, NODE_EXPRESSION, __func__);
     
-    generator_assert_node_type(generator->current->children[0], NODE_INT_CONSTANT, __func__);
-    fprintf(generator->fp, "  movl $%d, %%eax\n", *(int*) generator->current->children[0]->value);
+    generator_assert_node_type(list_at_index(generator->current->children, 0), NODE_INT_CONSTANT, __func__);
+    fprintf(generator->fp, "  movl $%d, %%eax\n", *(int*) ((node_t*) list_at_index(generator->current->children, 0))->value);
 }
 
 void generator_assert_node_type(node_t* node, node_type_t type, const char* fn)

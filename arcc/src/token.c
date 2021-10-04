@@ -50,8 +50,5 @@ void print_token(token_t* token) {
         case TOKEN_EOF:
             printf("<TOKEN_EOF (%d)>\n", token->type);
             break;
-        case TOKEN_BAD:
-            printf("<TOKEN_BAD (%d)>\n", token->type);
-            break;
     }
 }

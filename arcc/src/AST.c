@@ -2,20 +2,20 @@
 #include "utils.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
-node_t* node_create_with_children(node_type_t type, void* value, node_t** children, size_t nchildren)
+node_t* node_create_with_children(node_type_t type, void* value, list_t* children, size_t nchildren)
 {
     node_t* node = malloc(sizeof(*node));
     node->type = type;
     node->value = value;
     node->children = children;
-    node->nchildren = nchildren;
     return node;
 }
 
 node_t* node_create(node_type_t type, void* value)
 {
-    return node_create_with_children(type, value, NULL, 0);
+    return node_create_with_children(type, value, list_create(), 0);
 }
 
 void node_destruct(node_t* node)
@@ -27,9 +27,9 @@ void node_destruct(node_t* node)
     else
     {
         size_t i;
-        for (i = 0; i < node->nchildren; i++)
+        for (i = 0; i < list_size(node->children); i++)
         {
-            node_destruct(node->children[i]);
+            node_destruct(list_at_index(node->children, i));
         }
         free(node);
     }
@@ -86,8 +86,8 @@ void print_ast_indented(node_t* node, int depth)
             handle_error("Unknown node type", __func__);
     }
 
-    for (i = 0; i < node->nchildren; i++)
-        print_ast_indented(node->children[i], depth + 1);
+    for (i = 0; i < list_size(node->children); i++)
+        print_ast_indented(list_at_index(node->children, i), depth + 1);
 }
 
 void print_ast(node_t* node)

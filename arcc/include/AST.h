@@ -2,8 +2,7 @@
 #define ARCC_AST_H
 
 #include "token.h"
-
-#include <stdlib.h>
+#include "list.h"
 
 typedef enum NODE_TYPE
 {
@@ -28,11 +27,10 @@ typedef struct NODE_STRUCT
 {
     node_type_t type;
     void* value; //Used for constant nodes
-    struct NODE_STRUCT** children;
-    size_t nchildren;
+    list_t* children;
 } node_t;
 
-node_t* node_create_with_children(node_type_t type, void* value, node_t** children, size_t nchildren);
+node_t* node_create_with_children(node_type_t type, void* value, list_t* children, size_t nchildren);
 
 node_t* node_create(node_type_t type, void* value);
 

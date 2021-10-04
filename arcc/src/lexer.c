@@ -156,6 +156,23 @@ token_t* lexer_next_token(lexer_t* lexer)
         case ';':
             lexer_advance(lexer);
             return token_create(TOKEN_SEMICOLON, NULL);
+
+        case '+':
+            lexer_advance(lexer);
+            return token_create(TOKEN_PLUS, NULL);
+
+        case '-':
+            lexer_advance(lexer);
+            return token_create(TOKEN_MINUS, NULL);
+
+        case '~':
+            lexer_advance(lexer);
+            return token_create(TOKEN_TILDE, NULL);
+        
+        case '!':
+            lexer_advance(lexer);
+            return token_create(TOKEN_EXCLAM, NULL);
+
         default:
             snprintf(msg, 25, "Unexpected character (%c)", lexer->current);
             handle_error(msg, __func__);

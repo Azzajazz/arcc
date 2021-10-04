@@ -2,6 +2,7 @@
 #include "parser.h"
 #include "lexer.h"
 #include "token.h"
+#include "list.h"
 #include "utils.h"
 
 #include <stdlib.h>
@@ -31,15 +32,15 @@ void parser_destruct(parser_t* parser)
 
 node_t* parser_parse_statement(parser_t* parser)
 {
-    node_t** children = malloc(2 * sizeof(*children));
+    list_t* children = list_create_with_size(2);
     token_t* token;
 
     token = lexer_next_token(parser->lexer);
     parser_assert_token_type(token, TOKEN_KW_RETURN, __func__);
-    children[0] = node_create(NODE_RETURN_KEYWORD, NULL);
+    list_push_back(children, (void*) node_create(NODE_RETURN_KEYWORD, NULL));
     token_destruct(token);
 
-    children[1] = parser_parse_expr(parser);
+    list_push_back(children, (void*) parser_parse_expr(parser));
 
     token = lexer_next_token(parser->lexer);
     parser_assert_token_type(token, TOKEN_SEMICOLON, __func__);
@@ -50,12 +51,12 @@ node_t* parser_parse_statement(parser_t* parser)
 
 node_t* parser_parse_expr(parser_t* parser)
 {
-    node_t** children = malloc(sizeof(*children));
+    list_t* children = list_create_with_size(1);
     token_t* token;
 
     token = lexer_next_token(parser->lexer);
     parser_assert_token_type(token, TOKEN_LIT_INT, __func__);
-    children[0] = node_create(NODE_INT_CONSTANT, token->value);
+    list_push_back(children, (void*) node_create(NODE_INT_CONSTANT, token->value));
     token_destruct(token);
 
     return node_create_with_children(NODE_EXPRESSION, NULL, children, 1);
@@ -63,17 +64,17 @@ node_t* parser_parse_expr(parser_t* parser)
 
 node_t* parser_parse_funcdef(parser_t* parser)
 {
-    node_t** children = malloc(3 * sizeof(*children));
+    list_t* children = list_create_with_size(3);
     token_t* token;
 
     token = lexer_next_token(parser->lexer);
     parser_assert_token_type(token, TOKEN_KW_INT, __func__);
-    children[0] = node_create(NODE_INT_KEYWORD, NULL);
+    list_push_back(children, (void*) node_create(NODE_INT_KEYWORD, NULL));
     token_destruct(token);
 
     token = lexer_next_token(parser->lexer);
     parser_assert_token_type(token, TOKEN_ID, __func__);
-    children[1] = node_create(NODE_ID, token->value);
+    list_push_back(children, (void*) node_create(NODE_ID, token->value));
     token_destruct(token);
 
     token = lexer_next_token(parser->lexer);
@@ -88,7 +89,7 @@ node_t* parser_parse_funcdef(parser_t* parser)
     parser_assert_token_type(token, TOKEN_OPEN_BRACE, __func__);
     token_destruct(token);
 
-    children[2] = parser_parse_statement(parser);
+    list_push_back(children, (void*) parser_parse_statement(parser));
 
     token = lexer_next_token(parser->lexer);
     parser_assert_token_type(token, TOKEN_CLOSE_BRACE, __func__);
@@ -99,8 +100,8 @@ node_t* parser_parse_funcdef(parser_t* parser)
 
 node_t* parser_parse_program(parser_t* parser)
 {
-    node_t** children = malloc(sizeof(*children));
-    children[0] = parser_parse_funcdef(parser);
+    list_t* children = malloc(sizeof(*children));
+    list_push_back(children, (void*) parser_parse_funcdef(parser));
     return node_create_with_children(NODE_PROGRAM, NULL, children, 1);
 }
 

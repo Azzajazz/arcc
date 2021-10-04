@@ -6,10 +6,10 @@ OBJDIR = obj
 CC = gcc
 CFLAGS = -I$(INCDIR)
 
-_DEPS = AST.h lexer.h parser.h token.h utils.h asm_generator.h
+_DEPS = AST.h lexer.h parser.h token.h utils.h asm_generator.h list.h
 DEPS = $(addprefix $(INCDIR)/,$(_DEPS))
 
-_OBJS = AST.o lexer.o parser.o token.o utils.o main.o asm_generator.o
+_OBJS = AST.o lexer.o parser.o token.o utils.o main.o asm_generator.o list.o
 OBJS = $(addprefix $(OBJDIR)/,$(_OBJS))
 
 BINS = $(BINDIR)/arcc
